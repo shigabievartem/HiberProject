@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>app</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>ru.iteco.training</groupId>
+        <artifactId>dictionary</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Добавляем зависимось от модуля sort -->
+    <dependencies>
+        <dependency>
+            <groupId>ru.iteco.training</groupId>
+            <artifactId>db-mapping</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency-->
+        <!--dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency-->
+
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.1.5.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+      При сборке этого модуля просим скопировать получившиеся class файлы от зависимого модуля
+      в jar артефакт текущего.
+
+      Данный плагин производит сборку проекта в артифакт по описанию (файл descriptor).
+      В нашем случае файл descriptor уже предопределен - jar-with-dependencies.
+
+      Для понимание синтаксиса данных описаний можно создать собственный.
+
+      https://maven.apache.org/plugins/maven-assembly-plugin/descriptor-refs.html
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.iteco.training.App</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

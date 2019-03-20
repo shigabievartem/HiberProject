@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="Artem Sutulov" id="20190123-data-for-cities-dictionary">
+        <comment>Добавление данных в базу</comment>
+
+        <insert tableName="mayor">
+            <column name="mayor_id" value="${mayor.mayor_id}"/>
+            <column name="fio" value="Иванов Иван Иванович"/>
+        </insert>
+        <insert tableName="city">
+            <column name="city_id" value="${city.city_id}"/>
+            <column name="name" value="Москва"/>
+            <column name="mayor_id" value="${mayor.mayor_id}"/>
+        </insert>
+        <insert tableName="attribute_type">
+            <column name="attribute_type_id" value="${attribute_type.attribute_type_id}"/>
+            <column name="name" value="Boolean"/>
+        </insert>
+        <insert tableName="attribute">
+            <column name="attribute_id" value="${attributes.attribute_id}"/>
+            <column name="name" value="Город Федерального значения"/>
+            <column name="attribute_type_id" value="${attribute_type.attribute_type_id}"/>
+            <column name="value" value="true"/>
+        </insert>
+        <insert tableName="city_attribute">
+            <column name="city_id" value="${city.city_id}"/>
+            <column name="attribute_id" value="${attributes.attribute_id}"/>
+        </insert>
+
+        <rollback>
+            delete from city_attribute where city_id = ${city.city_id} and attribute_id = ${attributes.attribute_id};
+            delete from city where city_id = ${city.city_id};
+            delete from mayor where mayor_id = ${mayor.mayor_id};
+            delete from attribute where attribute_id = ${attributes.attribute_id};
+            delete from attribute_type where attribute_type_id = ${attribute_type.attribute_type_id};
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

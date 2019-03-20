@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <property name="city.city_id" value="2"/>
+    <property name="mayor.mayor_id" value="3"/>
+    <property name="attributes.attribute_id" value="4"/>
+    <property name="attribute_type.attribute_type_id" value="5"/>
+
+    <include file="db/changelog/20190121-cities-dictionary-tables.xml"/>
+    <include file="db/changelog/20190123-data-for-cities-dictionary.xml"/>
+
+</databaseChangeLog>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="Artem Sutulov" id="2018180121-add-mayor-table">
+        <comment>Создание таблицы mayor</comment>
+
+        <createSequence sequenceName="mayor_mayor_id_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="mayor" remarks="Мэр города">
+            <column name="mayor_id" type="bigint" remarks="Первичный ключ">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fio" type="varchar(255)" remarks="ФИО мэра">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="Artem Sutulov" id="2018180121-add-city-table">
+        <comment>Создание таблицы city</comment>
+
+        <createSequence sequenceName="city_city_id_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="city" remarks="Город">
+            <column name="city_id" type="bigint" remarks="Первичный ключ">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Имя города">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mayor_id" type="bigint" remarks="Мэр">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="mayor_id"
+                                 baseTableName="city" constraintName="fk_city_mayor"
+                                 referencedColumnNames="mayor_id"
+                                 referencedTableName="mayor"/>
+    </changeSet>
+
+
+    <changeSet author="Artem Sutulov" id="2018180121-add-attribute_type-table">
+        <comment>Создание таблицы attribute_type</comment>
+
+        <createSequence sequenceName="attribute_type_attribute_type_id_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="attribute_type" remarks="Тип атрибута">
+            <column name="attribute_type_id" type="bigint" remarks="Первичный ключ">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Название типа атрибута">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="Artem Sutulov" id="2018180121-add-attribute-table">
+        <comment>Создание таблицы attribute</comment>
+
+        <createSequence sequenceName="attribute_attribute_id_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="attribute" remarks="Атрибут">
+            <column name="attribute_id" type="bigint" remarks="Первичный ключ">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Имя атрибута">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="value" type="varchar(255)" remarks="Значение атрибута">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_type_id" type="bigint" remarks="Тип атрибута">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="attribute_type_id"
+                                 baseTableName="attribute" constraintName="fk_attribute_attribute_type"
+                                 referencedColumnNames="attribute_type_id"
+                                 referencedTableName="attribute_type"/>
+    </changeSet>
+
+
+    <changeSet author="Artem Sutulov" id="2018180121-add-city_attribute-table">
+        <comment>Создание линковочной таблицы city_attribute</comment>
+
+        <createTable tableName="city_attribute" remarks="Линковочная таблица для связи city и attrubute">
+            <column name="city_id" type="bigint" remarks="ID города">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_id" type="bigint" remarks="ID аттрибута">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="city_id, attribute_id" tableName="city_attribute"/>
+
+        <addForeignKeyConstraint baseColumnNames="city_id"
+                                 baseTableName="city_attribute" constraintName="fk_city_attribute_city"
+                                 referencedColumnNames="city_id"
+                                 referencedTableName="city"/>
+        <addForeignKeyConstraint baseColumnNames="attribute_id"
+                                 baseTableName="city_attribute" constraintName="fk_city_attribute_attribute"
+                                 referencedColumnNames="attribute_id"
+                                 referencedTableName="attribute"/>
+    </changeSet>
+
+</databaseChangeLog>
